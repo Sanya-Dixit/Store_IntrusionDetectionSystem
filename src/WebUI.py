@@ -18,11 +18,11 @@ from StoreUser import StoreUser, user_db
 # Flask App
 app = Flask(__name__)
 databases = {
-    'store_users': 'postgresql://postgres:secret@localhost/user_database',
-    'products': 'postgresql://postgres:secret@localhost/store'
+    'store_users': 'postgresql://postgres:secret@localhost:8000/user_database',
+    'products': 'postgresql://postgres:secret@localhost:8000/store'
 }
 app.config['SQLALCHEMY_BINDS'] = databases
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://postgres:secret@localhost/postgres'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:secret@localhost:8000/postgres'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 bootstrap = Bootstrap(app)
 user_db.init_app(app)
