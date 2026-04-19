@@ -45,7 +45,7 @@ def register(user=None):
     :return: Call to the home page
     '''
     form = RegisterForm()
-    user_db.create_all(bind=['store_users'])
+    user_db.create_all(bind_key=['store_users'])
     if request.method == "POST":
         if form.validate_on_submit():
             user_validation = StoreUser.query.filter_by(username=form.username.data).first()

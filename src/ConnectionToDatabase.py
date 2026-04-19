@@ -4,7 +4,7 @@ from ProductList import ProductList, user_db
 
 class ConnectionToDatabase:
     def make_connection(self, store, list_of_products=None):
-        user_db.create_all(bind=['products'])
+        user_db.create_all(bind_key=['products'])
         if list_of_products != None:
             for i in list_of_products:
                 product = i.split(',')
