@@ -86,13 +86,16 @@ class IDS:
         self.app, self.appAddr = self.sock.accept()
 
         queries = ""
-        while True:
-            tempQuery = self.app.recv(1024)
-            if not tempQuery:
-                break
-            queries += tempQuery.decode('utf-8')
-            if len(tempQuery) != 1024:
-                break
+        try:
+            while True:
+                tempQuery = self.app.recv(1024)
+                if not tempQuery:
+                    break
+                queries += tempQuery.decode('utf-8')
+                if len(tempQuery) != 1024:
+                    break
+        except ConnectionResetError:
+            print("Client disconnected unexpectedly")
         if len(queries) > 0: print(queries.split(';'))
         return queries.split(';')
 
@@ -137,6 +140,7 @@ class IDS:
             # handling empty checkout
             if len(transactionQueries) == 1 and transactionQueries[0] == '':
                 self.sendToApp("False")
+                self.app.close()
                 continue
 
             result = ""
@@ -148,6 +152,7 @@ class IDS:
                 else:
                     result += "True;"
             self.sendToApp(result)
+            self.app.close()
 
 
 if __name__ == '__main__':

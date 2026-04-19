@@ -34,6 +34,7 @@ class ConnectToIDS:
         # print("obj data: ", obj)
         print(received_data)
         print("queries data: ", queries)
+        self.sock.close()
         success_queries = ""
         filtered_queries = ""
         insert_queries = ""
@@ -55,7 +56,6 @@ class ConnectToIDS:
         print("Success queries: ", success_queries)
         print("Filtered queries: ", filtered_queries)
 
-        # self.sock.close()
         return success_queries, filtered_queries, insert_queries
 
 def main():
