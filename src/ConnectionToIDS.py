@@ -1,3 +1,4 @@
+import os
 import socket
 
 class ConnectToIDS:
@@ -6,9 +7,10 @@ class ConnectToIDS:
     def __init__(self):
         '''
         Default constructor that initializes the host and port for establishing a connection to IDS.
+        Host and port are read from IDS_HOST / IDS_PORT environment variables (defaults: 127.0.0.1 / 8000).
         '''
-        self.host = input("Enter IDS hostname, Eg:127.0.0.1:")
-        self.port = int(input("Enter IDS port number, Eg:8000:"))
+        self.host = os.environ.get('IDS_HOST', '127.0.0.1')
+        self.port = int(os.environ.get('IDS_PORT', '8000'))
         self.sock = None
 
     def connect_to_ids(self, message="None", queries=None):
