@@ -28,6 +28,9 @@ class IDS:
         self.template = None
         # Create a TCP/IP socket
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # Allow the port to be reused immediately after the process stops,
+        # preventing [WinError 10048] "address already in use" on restart
+        self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
     '''
     train method takes the path to the train transaction log.
@@ -118,8 +121,9 @@ class IDS:
         validConnection = False
         while not validConnection:
             print("Connecting to Application")
-            validConnection = ids.connectToApplication()
-            print("Attempt failed, trying again!")
+            validConnection = self.connectToApplication()
+            if not validConnection:
+                print("Attempt failed, trying again!")
 
         self.start()
 
