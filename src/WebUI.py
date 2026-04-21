@@ -175,8 +175,12 @@ def send_to_ids():
         message += j
     # print(message)
 
-    success_queries, filtered_queries, insert_queries = ids.connect_to_ids(message,
-                                                                           queries.get_list_of_queries())
+    try:
+        success_queries, filtered_queries, insert_queries = ids.connect_to_ids(message,
+                                                                               queries.get_list_of_queries())
+    except (ConnectionResetError, OSError) as e:
+        flash(f"IDS connection error: {e}")
+        return redirect(url_for('store'))
 
     if not filtered_queries:
         flash("NO")

@@ -16,22 +16,26 @@ class ConnectToIDS:
         
         :param host: IP address of the IDS 
         :param port: port number to connect to the IDS from
-        :return: None
+        :return: tuple of (success_queries, filtered_queries, insert_queries)
+        :raises ConnectionResetError: if the IDS server closes the connection unexpectedly
+        :raises OSError: if a socket-level error occurs while communicating with the IDS
         '''
-        # if self.sock is None:
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.sock.connect((self.host, self.port))
-        print("Sending queries to IDS...")
-        flag = True
-        while flag:
+        try:
+            self.sock.connect((self.host, self.port))
+            print("Sending queries to IDS...")
             message1 = bytearray(message, "ascii")
             self.sock.send(message1)
             data = self.sock.recv(1024)
+            if not data:
+                raise ConnectionResetError(
+                    "IDS server closed the connection without sending a response."
+                )
             received_data = data.decode('ascii')
-            if received_data is not None:
-                break
+        finally:
+            self.sock.close()
+
         received_data = received_data.split(";")
-        # print("obj data: ", obj)
         print(received_data)
         print("queries data: ", queries)
         success_queries = ""
@@ -55,7 +59,6 @@ class ConnectToIDS:
         print("Success queries: ", success_queries)
         print("Filtered queries: ", filtered_queries)
 
-        # self.sock.close()
         return success_queries, filtered_queries, insert_queries
 
 def main():
