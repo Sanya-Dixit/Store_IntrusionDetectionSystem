@@ -18,18 +18,22 @@ class ConnectToIDS:
         :param port: port number to connect to the IDS from
         :return: None
         '''
-        # if self.sock is None:
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.sock.connect((self.host, self.port))
-        print("Sending queries to IDS...")
-        flag = True
-        while flag:
-            message1 = bytearray(message, "ascii")
-            self.sock.send(message1)
-            data = self.sock.recv(1024)
-            received_data = data.decode('ascii')
-            if received_data is not None:
-                break
+        received_data = ""
+        try:
+            self.sock.connect((self.host, self.port))
+            print("Sending queries to IDS...")
+            flag = True
+            while flag:
+                message1 = bytearray(message, "ascii")
+                self.sock.send(message1)
+                data = self.sock.recv(1024)
+                received_data = data.decode('ascii')
+                if received_data is not None:
+                    break
+        finally:
+            self.sock.close()
+            self.sock = None
         received_data = received_data.split(";")
         # print("obj data: ", obj)
         print(received_data)
@@ -55,7 +59,6 @@ class ConnectToIDS:
         print("Success queries: ", success_queries)
         print("Filtered queries: ", filtered_queries)
 
-        # self.sock.close()
         return success_queries, filtered_queries, insert_queries
 
 def main():

@@ -92,14 +92,13 @@ def remove_product():
     '''
     try:
         global obj
+        if len(obj.get_data()) == 0:
+            flash("No product to remove!")
+            return "None"
         product_id = str(request.form['pid'])
         obj.remove_data(product_id)
         queries.add_query("DELETE", product_id, "products")
-        if len(data_send) == 0:
-            flash("No product to remove!")
-            return "None"
-        else:
-            return json.dumps([prod.dump() for prod in obj.get_data()])
+        return json.dumps([prod.dump() for prod in obj.get_data()])
     except Exception as e:
         flash(e)
 
