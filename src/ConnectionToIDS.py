@@ -8,7 +8,7 @@ class ConnectToIDS:
         Default constructor that initializes the host and port for establishing a connection to IDS.
         '''
         self.host = input("Enter IDS hostname, Eg:127.0.0.1:").strip()
-        self.port = int(input("Enter IDS port number, Eg:8000:"))
+        self.port = int(input("Enter IDS port number, Eg:8000:").strip())
         self.sock = None
 
     def connect_to_ids(self, message="None", queries=None):
