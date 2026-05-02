@@ -29,7 +29,7 @@ class DELETE:
         index += 1
         fromData = ""
         fromIndex = 0 if len(self.FROM) == 0 else len(self.FROM) - 1
-        while query[index] != 'WHERE' and index < len(query):
+        while index < len(query) and query[index] != 'WHERE':
             fromData += query[index] + " "
             index += 1
         self.FROM[fromIndex].parse(fromData.strip())

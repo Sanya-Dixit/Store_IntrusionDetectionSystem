@@ -82,7 +82,6 @@ class IDS:
     ###
     def recvParse(self):
         print("waiting for connection")
-        self.sock.listen(15)
         self.app, self.appAddr = self.sock.accept()
 
         queries = ""
@@ -91,15 +90,15 @@ class IDS:
             if not tempQuery:
                 break
             queries += tempQuery.decode('utf-8')
-            if len(tempQuery) != 1024:
-                break
-        if len(queries) > 0: print(queries.split(';'))
+        if len(queries) > 0:
+            print(queries.split(';'))
         return queries.split(';')
 
     def sendToApp(self, data):
         print("Sending result back to application")
         print("result: ", data)
-        self.app.send(bytes(data, 'ascii'))
+        self.app.sendall(bytes(data, 'ascii'))
+        self.app.close()
 
     ###
     # callQueryNode function passes the query to the query parser.
@@ -130,6 +129,7 @@ class IDS:
     ###
     def start(self):
         self.train()
+        self.sock.listen(15)
 
         while True:
             transactionQueries = self.recvParse()
@@ -143,10 +143,14 @@ class IDS:
             for query in transactionQueries:
                 if query == '':
                     continue
-                if not self.detect(query):
+                try:
+                    if not self.detect(query):
+                        result += "False;"
+                    else:
+                        result += "True;"
+                except (AttributeError, IndexError, ValueError) as e:
+                    print("Error detecting query: ", str(e))
                     result += "False;"
-                else:
-                    result += "True;"
             self.sendToApp(result)
 
 

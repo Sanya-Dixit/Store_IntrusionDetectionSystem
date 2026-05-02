@@ -17,6 +17,11 @@ class MatchTemplate:
 
         key = query.split()[0].upper()
         queryTemplate = keyword.getKeyword(key)
+
+        if queryTemplate is None:
+            print("Unsupported keyword:", key)
+            return False
+
         queryTemplate.parse(query)
 
         if key not in self.template:
