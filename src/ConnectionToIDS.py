@@ -1,4 +1,5 @@
 import socket
+import logging
 
 class ConnectToIDS:
     __slots__ = 'host', 'port', 'sock'
@@ -51,9 +52,9 @@ class ConnectToIDS:
             else:
                 filtered_queries += queries[check] + "\n"
 
-        print("Inserted queries: ", insert_queries)
-        print("Success queries: ", success_queries)
-        print("Filtered queries: ", filtered_queries)
+        logging.info("Inserted queries: %s", insert_queries)
+        logging.info("Success queries: %s", success_queries)
+        logging.info("Filtered queries: %s", filtered_queries)
 
         # self.sock.close()
         return success_queries, filtered_queries, insert_queries

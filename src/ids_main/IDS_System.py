@@ -4,6 +4,7 @@
 #
 ###
 
+import logging
 import os
 import socket
 
@@ -93,7 +94,9 @@ class IDS:
             queries += tempQuery.decode('utf-8')
             if len(tempQuery) != 1024:
                 break
-        if len(queries) > 0: print(queries.split(';'))
+        if len(queries) > 0:
+            logging.info("Queries received: %s", queries.split(';'))
+            print(queries.split(';'))
         return queries.split(';')
 
     def sendToApp(self, data):

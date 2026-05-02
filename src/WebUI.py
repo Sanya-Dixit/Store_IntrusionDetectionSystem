@@ -1,5 +1,12 @@
 # All imports here
+import logging
 import os
+
+logging.basicConfig(
+    filename=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'query_logs.log'),
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
 
 # Importing support libraries
 from flask import Flask, redirect, render_template, flash, request, json, url_for

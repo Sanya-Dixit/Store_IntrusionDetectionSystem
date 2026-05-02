@@ -1,3 +1,6 @@
+import logging
+
+
 class QueryList:
     '''
     
@@ -33,8 +36,8 @@ class QueryList:
             query = "DELETE FROM cart WHERE product_id=" + product + ";"
         elif query.upper() == "DELETE" and table != "":
             query = "DELETE FROM " + table + " WHERE product_id=" + product + ";"
-        print(self.get_list_of_queries())
         self.list_of_queries.append(str(query))
+        logging.info("Query added: %s", query)
 
     def remove_all_query(self):
         '''
